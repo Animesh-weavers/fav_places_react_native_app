@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "fav_places",
+    "slug": "fav_places",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "fav_places"
+}
