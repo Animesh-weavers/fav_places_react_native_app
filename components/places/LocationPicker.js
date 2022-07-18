@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../ui/outlinedButton";
 import Geolocation from "@react-native-community/geolocation";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 const LocationPicker = () => {
   const [currentPosition, setCurrentPosition] = useState({
@@ -22,6 +23,16 @@ const LocationPicker = () => {
   return (
     <View>
       <View style={styles.mapPreview}>
+        <MapView
+          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          style={styles.map}
+          region={{
+            latitude: 37.78825,
+            longitude: -122.4324,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}
+        ></MapView>
       </View>
       <View style={styles.actions}>
         <OutlinedButton icon="map-pin" onPress={getLocationHandler}>
@@ -51,5 +62,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
