@@ -1,7 +1,6 @@
 import {
   Text,
   View,
-  Button,
   PermissionsAndroid,
   Image,
   StyleSheet,
