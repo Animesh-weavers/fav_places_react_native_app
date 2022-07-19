@@ -6,10 +6,11 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Colors } from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
+import { AuthContext } from "../../store/auth-context";
 
 const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -17,6 +18,7 @@ const PlaceForm = () => {
   const [enteredCurrentAddress, setEnteredCurrentAddress] = useState("");
   const [enteredPickedAddress, setEnteredPickedAddress] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
+  const authCtx = useContext(AuthContext);
 
   const submitHandler = () => {
     setIsSubmit(true);
@@ -47,7 +49,8 @@ const PlaceForm = () => {
   };
 
   const LogoutHandler = () => {
-    console.log("Logout");
+    // console.log("Logout");
+    authCtx.logout();
   };
   return (
     <ScrollView style={styles.form}>
