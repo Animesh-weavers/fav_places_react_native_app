@@ -1,25 +1,35 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../ui/outlinedButton";
 import Geolocation from "@react-native-community/geolocation";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 const LocationPicker = () => {
   const [currentPosition, setCurrentPosition] = useState({
     lat: 0,
     long: 0,
   });
-  const getLocationHandler = () => {
+  const [getLocationHandler, setGetLocationHandler] = useState(false);
+  const [isShowWhichMap, setIsShowWhichMap] = useState(false);
+
+  useEffect(() => {
     Geolocation.getCurrentPosition((info) =>
       setCurrentPosition({
         lat: info.coords.latitude,
         long: info.coords.longitude,
       })
     );
-    console.log(currentPosition.lat, currentPosition.long);
+  }, [getLocationHandler]);
+
+  const currentLocationHandler = () => {
+    setIsShowWhichMap(false);
+    setGetLocationHandler(!getLocationHandler);
   };
-  const pickOnMapHandler = () => {};
+
+  const pickOnMapHandler = () => {
+    setIsShowWhichMap(true);
+  };
   return (
     <View>
       <View style={styles.mapPreview}>
@@ -27,15 +37,44 @@ const LocationPicker = () => {
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
           region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude: currentPosition.lat,
+            longitude: currentPosition.long,
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
           }}
-        ></MapView>
+        >
+          {isShowWhichMap ? (
+            <Marker
+              draggable
+              tappable={true}
+              tracksViewChanges={true}
+              title="Your Fav Location..."
+              coordinate={{
+                latitude: currentPosition.lat,
+                longitude: currentPosition.long,
+              }}
+              onDragEnd={(e) => {
+                setCurrentPosition({
+                  lat: e.nativeEvent.coordinate.latitude,
+                  long: e.nativeEvent.coordinate.longitude,
+                });
+                console.log(e.nativeEvent.coordinate.latitude);
+                console.log(e.nativeEvent.coordinate.longitude);
+              }}
+            />
+          ) : (
+            <Marker
+              coordinate={{
+                latitude: currentPosition.lat,
+                longitude: currentPosition.long,
+              }}
+              title="Current Location"
+            />
+          )}
+        </MapView>
       </View>
       <View style={styles.actions}>
-        <OutlinedButton icon="map-pin" onPress={getLocationHandler}>
+        <OutlinedButton icon="map-pin" onPress={currentLocationHandler}>
           Locate User
         </OutlinedButton>
         <OutlinedButton icon="map" onPress={pickOnMapHandler}>
