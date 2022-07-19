@@ -128,10 +128,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    backgroundColor: "#212F3C",
     width: "85%",
-    paddingLeft: 20,
-    paddingRight: 20,
+
     paddingTop: 35,
 
     paddingBottom: 30,
