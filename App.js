@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Text, View } from "react-native";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AllPlaces from "./screens/AllPlaces";
@@ -8,12 +7,12 @@ import AddPlace from "./screens/AddPlace";
 import IconButton from "./components/ui/IconButton";
 import { Colors } from "./constants/colors";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <>
+      <StatusBar animated={true} backgroundColor={Colors.primary500} barStyle="dark-content" />
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{

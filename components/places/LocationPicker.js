@@ -23,7 +23,7 @@ const LocationPicker = (props) => {
         long: info.coords.longitude,
       })
     );
-  }, [getLocationHandler]);
+  }, [getLocationHandler, props.isSubmit]);
 
   const currentLocationHandler = async () => {
     props.pickedLocationHandler("");

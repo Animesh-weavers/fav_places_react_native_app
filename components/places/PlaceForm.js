@@ -19,7 +19,7 @@ const PlaceForm = () => {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const submitHandler = () => {
-    setIsSubmit(true)
+    setIsSubmit(true);
     if (
       (enteredTitle != "" && enteredImage != "") ||
       enteredCurrentAddress != "" ||
@@ -45,6 +45,10 @@ const PlaceForm = () => {
       alert("Enter valid inputs...");
     }
   };
+
+  const LogoutHandler = () => {
+    console.log("Logout");
+  };
   return (
     <ScrollView style={styles.form}>
       <View>
@@ -55,10 +59,14 @@ const PlaceForm = () => {
           style={styles.input}
         />
       </View>
-      <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} isSubmit={isSubmit} />
+      <ImagePicker
+        imagePickHandler={(e) => setEnteredImage(e)}
+        isSubmit={isSubmit}
+      />
       <LocationPicker
         currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
         pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
+        isSubmit={isSubmit}
       />
       <Pressable
         style={({ pressed }) => [
@@ -68,6 +76,15 @@ const PlaceForm = () => {
         onPress={submitHandler}
       >
         <Text style={styles.submitButtonText}>Submit</Text>
+      </Pressable>
+      <Pressable
+        style={({ pressed }) => [
+          styles.submitButton,
+          pressed && styles.subitButtonPressed,
+        ]}
+        onPress={LogoutHandler}
+      >
+        <Text style={styles.submitButtonText}>Logout</Text>
       </Pressable>
     </ScrollView>
   );
