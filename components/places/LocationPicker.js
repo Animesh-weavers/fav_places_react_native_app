@@ -6,15 +6,15 @@ import Geolocation from "@react-native-community/geolocation";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import Geocoder from "@timwangdev/react-native-geocoder";
 
-const LocationPicker = () => {
+const LocationPicker = (props) => {
   const [currentPosition, setCurrentPosition] = useState({
     lat: 0,
     long: 0,
   });
   const [getLocationHandler, setGetLocationHandler] = useState(false);
   const [isShowWhichMap, setIsShowWhichMap] = useState(false);
-  const [pickedAddress, setPickedAddress] = useState("");
-  const [currentAddress, setCurrentAddress] = useState("");
+  // const [pickedAddress, setPickedAddress] = useState("");
+  // const [currentAddress, setCurrentAddress] = useState("");
 
   useEffect(() => {
     Geolocation.getCurrentPosition((info) =>
@@ -26,13 +26,14 @@ const LocationPicker = () => {
   }, [getLocationHandler]);
 
   const currentLocationHandler = async () => {
+    props.pickedLocationHandler("");
     setIsShowWhichMap(false);
     setGetLocationHandler(!getLocationHandler);
     try {
       const position = { lat: currentPosition.lat, lng: currentPosition.long };
       const response = await Geocoder.geocodePosition(position);
-      // console.log("CURRENT LOCATION", response[0].formattedAddress);
-      setCurrentAddress(response[0].formattedAddress);
+      // console.log(response[0].formattedAddress);
+      props.currentLocationPickedHandler(response[0].formattedAddress);
     } catch (error) {
       // console.log(error);
     }
@@ -43,6 +44,7 @@ const LocationPicker = () => {
   };
 
   const mapDragEndHandler = async (e) => {
+    props.currentLocationPickedHandler("");
     setCurrentPosition({
       lat: e.nativeEvent.coordinate.latitude,
       long: e.nativeEvent.coordinate.longitude,
@@ -53,8 +55,8 @@ const LocationPicker = () => {
         lng: currentPosition.long,
       };
       const response = await Geocoder.geocodePosition(position);
-      // console.log("PICKED LOCATION", response[0].formattedAddress);
-      setPickedAddress(response[0].formattedAddress);
+      // setPickedAddress(response[0].formattedAddress);
+      props.pickedLocationHandler(response[0].formattedAddress);
     } catch (error) {
       // console.log(error);
     }
@@ -113,7 +115,7 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   mapPreview: {
     width: "100%",
-    height: 270,
+    height: 300,
     marginVertical: 8,
     justifyContent: "center",
     alignItems: "center",

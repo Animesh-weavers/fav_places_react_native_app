@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
@@ -6,6 +13,38 @@ import LocationPicker from "./LocationPicker";
 
 const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
+  const [enteredImage, setEnteredImage] = useState("");
+  const [enteredCurrentAddress, setEnteredCurrentAddress] = useState("");
+  const [enteredPickedAddress, setEnteredPickedAddress] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  const submitHandler = () => {
+    setIsSubmit(true)
+    if (
+      (enteredTitle != "" && enteredImage != "") ||
+      enteredCurrentAddress != "" ||
+      enteredPickedAddress != ""
+    ) {
+      //entered value
+      const obj = {
+        enteredTitle,
+        enteredImage,
+        enteredCurrentAddress,
+        enteredPickedAddress,
+      };
+
+      //print obj object
+      console.log(obj);
+
+      //reset states
+      setEnteredCurrentAddress("");
+      setEnteredImage("");
+      setEnteredPickedAddress("");
+      setEnteredTitle("");
+    } else {
+      alert("Enter valid inputs...");
+    }
+  };
   return (
     <ScrollView style={styles.form}>
       <View>
@@ -16,8 +55,20 @@ const PlaceForm = () => {
           style={styles.input}
         />
       </View>
-      <ImagePicker />
-      <LocationPicker />
+      <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} isSubmit={isSubmit} />
+      <LocationPicker
+        currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
+        pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
+      />
+      <Pressable
+        style={({ pressed }) => [
+          styles.submitButton,
+          pressed && styles.subitButtonPressed,
+        ]}
+        onPress={submitHandler}
+      >
+        <Text style={styles.submitButtonText}>Submit</Text>
+      </Pressable>
     </ScrollView>
   );
 };
@@ -42,5 +93,21 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.primary700,
     borderBottomWidth: 2,
     backgroundColor: Colors.primary100,
+  },
+  submitButton: {
+    backgroundColor: Colors.accent500,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 15,
+    marginTop: 18,
+    borderRadius: 10,
+  },
+  subitButtonPressed: {
+    opacity: 0.7,
+  },
+  submitButtonText: {
+    color: "white",
+    fontSize: 17,
+    fontWeight: "bold",
   },
 });

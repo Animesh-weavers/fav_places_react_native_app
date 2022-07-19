@@ -10,7 +10,7 @@ import { launchCamera } from "react-native-image-picker";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../ui/outlinedButton";
 
-const ImagePicker = () => {
+const ImagePicker = ({ imagePickHandler, isSubmit }) => {
   const [capturedImageUri, setCapturedImageUri] = useState({});
   const openCamera = async () => {
     try {
@@ -31,6 +31,7 @@ const ImagePicker = () => {
         } else {
           const source = { uri: response.assets[0].uri };
           setCapturedImageUri(source);
+          imagePickHandler(source.uri);
         }
       } else {
         // console.log("Camera permission denied");
@@ -46,6 +47,10 @@ const ImagePicker = () => {
     imagePreview = (
       <Image source={{ uri: capturedImageUri.uri }} style={styles.image} />
     );
+  }
+  if (isSubmit) {
+    imagePreview = <Text>No image taken yet..</Text>;
+    // console.log(isSubmit)
   }
 
   return (
