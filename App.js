@@ -8,6 +8,7 @@ import AddPlace from "./screens/AddPlace";
 import IconButton from "./components/ui/IconButton";
 import { Colors } from "./constants/colors";
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

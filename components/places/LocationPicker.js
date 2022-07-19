@@ -4,6 +4,7 @@ import { Colors } from "../../constants/colors";
 import OutlinedButton from "../ui/outlinedButton";
 import Geolocation from "@react-native-community/geolocation";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import Geocoder from "@timwangdev/react-native-geocoder";
 
 const LocationPicker = () => {
   const [currentPosition, setCurrentPosition] = useState({
@@ -12,6 +13,8 @@ const LocationPicker = () => {
   });
   const [getLocationHandler, setGetLocationHandler] = useState(false);
   const [isShowWhichMap, setIsShowWhichMap] = useState(false);
+  const [pickedAddress, setPickedAddress] = useState("");
+  const [currentAddress, setCurrentAddress] = useState("");
 
   useEffect(() => {
     Geolocation.getCurrentPosition((info) =>
@@ -22,19 +25,46 @@ const LocationPicker = () => {
     );
   }, [getLocationHandler]);
 
-  const currentLocationHandler = () => {
+  const currentLocationHandler = async () => {
     setIsShowWhichMap(false);
     setGetLocationHandler(!getLocationHandler);
+    try {
+      const position = { lat: currentPosition.lat, lng: currentPosition.long };
+      const response = await Geocoder.geocodePosition(position);
+      // console.log("CURRENT LOCATION", response[0].formattedAddress);
+      setCurrentAddress(response[0].formattedAddress);
+    } catch (error) {
+      // console.log(error);
+    }
   };
 
   const pickOnMapHandler = () => {
     setIsShowWhichMap(true);
   };
+
+  const mapDragEndHandler = async (e) => {
+    setCurrentPosition({
+      lat: e.nativeEvent.coordinate.latitude,
+      long: e.nativeEvent.coordinate.longitude,
+    });
+    try {
+      const position = {
+        lat: currentPosition.lat,
+        lng: currentPosition.long,
+      };
+      const response = await Geocoder.geocodePosition(position);
+      // console.log("PICKED LOCATION", response[0].formattedAddress);
+      setPickedAddress(response[0].formattedAddress);
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
   return (
     <View>
       <View style={styles.mapPreview}>
         <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           region={{
             latitude: currentPosition.lat,
@@ -53,14 +83,7 @@ const LocationPicker = () => {
                 latitude: currentPosition.lat,
                 longitude: currentPosition.long,
               }}
-              onDragEnd={(e) => {
-                setCurrentPosition({
-                  lat: e.nativeEvent.coordinate.latitude,
-                  long: e.nativeEvent.coordinate.longitude,
-                });
-                console.log(e.nativeEvent.coordinate.latitude);
-                console.log(e.nativeEvent.coordinate.longitude);
-              }}
+              onDragEnd={mapDragEndHandler}
             />
           ) : (
             <Marker
