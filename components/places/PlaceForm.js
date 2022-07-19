@@ -11,6 +11,7 @@ import { Colors } from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import { AuthContext } from "../../store/auth-context";
+import LoaderScreen from "../../screens/LoaderScreen";
 
 const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -19,6 +20,7 @@ const PlaceForm = () => {
   const [enteredPickedAddress, setEnteredPickedAddress] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
   const authCtx = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = () => {
     setIsSubmit(true);
@@ -50,46 +52,53 @@ const PlaceForm = () => {
 
   const LogoutHandler = () => {
     // console.log("Logout");
+    setIsLoading(true);
     authCtx.logout();
+    setIsLoading(false);
   };
   return (
-    <ScrollView style={styles.form}>
-      <View>
-        <Text style={styles.label}>Title</Text>
-        <TextInput
-          onChangeText={(e) => setEnteredTitle(e)}
-          value={enteredTitle}
-          style={styles.input}
-        />
-      </View>
-      <ImagePicker
-        imagePickHandler={(e) => setEnteredImage(e)}
-        isSubmit={isSubmit}
-      />
-      <LocationPicker
-        currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
-        pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
-        isSubmit={isSubmit}
-      />
-      <Pressable
-        style={({ pressed }) => [
-          styles.submitButton,
-          pressed && styles.subitButtonPressed,
-        ]}
-        onPress={submitHandler}
-      >
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </Pressable>
-      <Pressable
-        style={({ pressed }) => [
-          styles.submitButton,
-          pressed && styles.subitButtonPressed,
-        ]}
-        onPress={LogoutHandler}
-      >
-        <Text style={styles.submitButtonText}>Logout</Text>
-      </Pressable>
-    </ScrollView>
+    <>
+      {!isLoading && (
+        <ScrollView style={styles.form}>
+          <View>
+            <Text style={styles.label}>Title</Text>
+            <TextInput
+              onChangeText={(e) => setEnteredTitle(e)}
+              value={enteredTitle}
+              style={styles.input}
+            />
+          </View>
+          <ImagePicker
+            imagePickHandler={(e) => setEnteredImage(e)}
+            isSubmit={isSubmit}
+          />
+          <LocationPicker
+            currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
+            pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
+            isSubmit={isSubmit}
+          />
+          <Pressable
+            style={({ pressed }) => [
+              styles.submitButton,
+              pressed && styles.subitButtonPressed,
+            ]}
+            onPress={submitHandler}
+          >
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.submitButton,
+              pressed && styles.subitButtonPressed,
+            ]}
+            onPress={LogoutHandler}
+          >
+            <Text style={styles.submitButtonText}>Logout</Text>
+          </Pressable>
+        </ScrollView>
+      )}
+      {isLoading && <LoaderScreen />}
+    </>
   );
 };
 
