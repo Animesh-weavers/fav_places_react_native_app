@@ -12,7 +12,7 @@ import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import { AuthContext } from "../../store/auth-context";
 import LoaderScreen from "../../screens/LoaderScreen";
-import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
 const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -22,26 +22,43 @@ const PlaceForm = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
 
   const submitHandler = () => {
     setIsSubmit(true);
+    setIsLoading(true);
     if (
       (enteredTitle != "" && enteredImage != "") ||
       enteredCurrentAddress != "" ||
       enteredPickedAddress != ""
     ) {
-      navigation.navigate("AllPlaces");
       //entered value
-      const obj = {
-        enteredTitle,
-        enteredImage,
-        enteredCurrentAddress,
-        enteredPickedAddress,
+      const data = {
+        title: enteredTitle,
+        image: enteredImage,
+        pickedAddress: enteredPickedAddress,
+        currentAddress: enteredCurrentAddress,
       };
 
       //print obj object
-      console.log(obj);
+      // console.log(obj);
+      //call post api
+      axios
+        .post("https://ritendu-api.weavers-web.com/api/place", data)
+        .then((response) => {
+          setIsLoading(false);
+          if (response.status === 200) {
+            // ToastAndroid.showWithGravity(
+            //   "All Your Base Are Belong To Us",
+            //   ToastAndroid.SHORT,
+            //   ToastAndroid.CENTER
+            // );
+          }
+        })
+        .catch((error) => {
+          // console.log(error);
+          setIsLoading(false);
+          alert("Enter Valid Data...");
+        });
 
       //reset states
       setEnteredCurrentAddress("");
@@ -54,9 +71,7 @@ const PlaceForm = () => {
   };
 
   const LogoutHandler = () => {
-    setIsLoading(true);
     authCtx.logout();
-    setIsLoading(false);
   };
   return (
     <>
