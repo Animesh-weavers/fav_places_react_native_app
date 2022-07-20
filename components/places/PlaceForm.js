@@ -12,6 +12,7 @@ import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import { AuthContext } from "../../store/auth-context";
 import LoaderScreen from "../../screens/LoaderScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const PlaceForm = () => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -21,6 +22,7 @@ const PlaceForm = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
   const submitHandler = () => {
     setIsSubmit(true);
@@ -29,6 +31,7 @@ const PlaceForm = () => {
       enteredCurrentAddress != "" ||
       enteredPickedAddress != ""
     ) {
+      navigation.navigate("AllPlaces");
       //entered value
       const obj = {
         enteredTitle,
@@ -51,7 +54,6 @@ const PlaceForm = () => {
   };
 
   const LogoutHandler = () => {
-    // console.log("Logout");
     setIsLoading(true);
     authCtx.logout();
     setIsLoading(false);
@@ -68,10 +70,7 @@ const PlaceForm = () => {
               style={styles.input}
             />
           </View>
-          <ImagePicker
-            imagePickHandler={(e) => setEnteredImage(e)}
-            isSubmit={isSubmit}
-          />
+          <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} />
           <LocationPicker
             currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
             pickedLocationHandler={(e) => setEnteredPickedAddress(e)}

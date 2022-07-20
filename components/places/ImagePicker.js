@@ -10,7 +10,7 @@ import { launchCamera } from "react-native-image-picker";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../ui/outlinedButton";
 
-const ImagePicker = ({ imagePickHandler, isSubmit }) => {
+const ImagePicker = ({ imagePickHandler }) => {
   const [capturedImageUri, setCapturedImageUri] = useState({});
   const openCamera = async () => {
     try {
@@ -47,10 +47,6 @@ const ImagePicker = ({ imagePickHandler, isSubmit }) => {
     imagePreview = (
       <Image source={{ uri: capturedImageUri.uri }} style={styles.image} />
     );
-  }
-  if (isSubmit) {
-    imagePreview = <Text>No image taken yet..</Text>;
-    // console.log(isSubmit)
   }
 
   return (
