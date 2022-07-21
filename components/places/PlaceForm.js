@@ -76,7 +76,9 @@ const PlaceForm = () => {
   };
   return (
     <>
-      {!isLoading && (
+      {isLoading ? (
+        <LoaderScreen />
+      ) : (
         <ScrollView style={styles.form}>
           <View>
             <Text style={styles.label}>Title</Text>
@@ -86,33 +88,38 @@ const PlaceForm = () => {
               style={styles.input}
             />
           </View>
-          <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} />
-          <LocationPicker
-            currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
-            pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
-            isSubmit={isSubmit}
-          />
-          <Pressable
-            style={({ pressed }) => [
-              styles.submitButton,
-              pressed && styles.subitButtonPressed,
-            ]}
-            onPress={submitHandler}
-          >
-            <Text style={styles.submitButtonText}>Submit</Text>
-          </Pressable>
-          <Pressable
-            style={({ pressed }) => [
-              styles.submitButton,
-              pressed && styles.subitButtonPressed,
-            ]}
-            onPress={LogoutHandler}
-          >
-            <Text style={styles.submitButtonText}>Logout</Text>
-          </Pressable>
+          <View>
+            <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} />
+          </View>
+          <View>
+            <LocationPicker
+              currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
+              pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
+              isSubmit={isSubmit}
+            />
+          </View>
+          <View style={{ marginBottom: 40 }}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.submitButton,
+                pressed && styles.subitButtonPressed,
+              ]}
+              onPress={submitHandler}
+            >
+              <Text style={styles.submitButtonText}>Submit</Text>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.submitButton,
+                pressed && styles.subitButtonPressed,
+              ]}
+              onPress={LogoutHandler}
+            >
+              <Text style={styles.submitButtonText}>Logout</Text>
+            </Pressable>
+          </View>
         </ScrollView>
       )}
-      {isLoading && <LoaderScreen />}
     </>
   );
 };

@@ -6,7 +6,6 @@ const LoaderScreen = () => {
   return (
     <View style={styles.container}>
       <Image source={require("../images/loading.gif")} />
-      {/* <Text>Loading...</Text> */}
     </View>
   );
 };
