@@ -91,13 +91,13 @@ const PlaceForm = () => {
           <View>
             <ImagePicker imagePickHandler={(e) => setEnteredImage(e)} />
           </View>
-          <View>
-            <LocationPicker
-              currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
-              pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
-              isSubmit={isSubmit}
-            />
-          </View>
+
+          <LocationPicker
+            currentLocationPickedHandler={(e) => setEnteredCurrentAddress(e)}
+            pickedLocationHandler={(e) => setEnteredPickedAddress(e)}
+            isSubmit={isSubmit}
+          />
+
           <View style={{ marginBottom: 40 }}>
             <Pressable
               style={({ pressed }) => [

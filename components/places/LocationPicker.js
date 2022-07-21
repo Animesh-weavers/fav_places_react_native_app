@@ -17,11 +17,21 @@ const LocationPicker = (props) => {
   // const [currentAddress, setCurrentAddress] = useState("");
 
   useEffect(() => {
-    Geolocation.getCurrentPosition((info) =>
-      setCurrentPosition({
-        lat: info.coords.latitude,
-        long: info.coords.longitude,
-      })
+    // Geolocation.getCurrentPosition((info) =>
+    //   setCurrentPosition({
+    //     lat: info.coords.latitude,
+    //     long: info.coords.longitude,
+    //   })
+    // );
+    Geolocation.getCurrentPosition(
+      (info) => {
+        setCurrentPosition({
+          lat: info.coords.latitude,
+          long: info.coords.longitude,
+        });
+      },
+      (error) => console.error(error)
+      // { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }, [getLocationHandler, props.isSubmit]);
 
