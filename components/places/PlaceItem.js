@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   container: {
     // borderWidth: 1,
     // borderColor: "white",
-    marginBottom:20
+    padding:10
   },
   imageContainer: {
     width: "100%",
