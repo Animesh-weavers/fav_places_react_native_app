@@ -25,12 +25,13 @@ const PlaceForm = () => {
 
   const submitHandler = () => {
     setIsSubmit(true);
-    setIsLoading(true);
+
     if (
       (enteredTitle != "" && enteredImage != "") ||
       enteredCurrentAddress != "" ||
       enteredPickedAddress != ""
     ) {
+      setIsLoading(true);
       //entered value
       const data = {
         title: enteredTitle,
